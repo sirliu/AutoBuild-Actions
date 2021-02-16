@@ -49,6 +49,7 @@ Diy-Part1() {
 	ExtraPackages svn other luci-app-socat https://github.com/Lienol/openwrt-package/trunk
 	ExtraPackages svn other luci-app-usb3disable https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw
         ExtraPackages git other luci-app-tcpdump https://github.com/KFERMercer
+        ExtraPackages git lean lua-maxminddb https://github.com/jerrykuku master
 }
 
 Diy-Part2() {
