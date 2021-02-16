@@ -48,6 +48,7 @@ Diy-Part1() {
 	ExtraPackages git other luci-app-serverchan https://github.com/tty228 master
 	ExtraPackages svn other luci-app-socat https://github.com/Lienol/openwrt-package/trunk
 	ExtraPackages svn other luci-app-usb3disable https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw
+        ExtraPackages git other luci-app-tcpdump https://github.com/KFERMercer
 }
 
 Diy-Part2() {
