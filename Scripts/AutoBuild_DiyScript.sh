@@ -4,7 +4,7 @@
 # AutoBuild DiyScript
 
 Diy_Core() {
-	Author=Hyy2001
+	Author=sirliu
 	Default_Device=d-team_newifi-d2
 
 	INCLUDE_AutoUpdate=true
@@ -14,8 +14,8 @@ Diy_Core() {
 	INCLUDE_Enable_FirewallPort_53=true
 
 	INCLUDE_SSR_Plus=true
-	INCLUDE_Passwall=false
-	INCLUDE_HelloWorld=false
+	INCLUDE_Passwall=true
+	INCLUDE_HelloWorld=true
 	INCLUDE_Bypass=false
 	INCLUDE_OpenClash=true
 }
