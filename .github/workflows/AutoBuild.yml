@@ -15,7 +15,7 @@ on:
       ssh:
         description: 'SSH connection to Actions'
         required: true
-        default: 'true'
+        default: 'false'
 
   #schedule:
   #  - cron: 0 11 * * *
@@ -33,6 +33,7 @@ env:
   UPLOAD_BIN_DIR: false
   REMOVE_OLD_RELEASE: false
   REMOVE_WORKFLOW_RUNS: true
+  SSH_ACTIONS: true
 
 jobs:
   build:
@@ -81,7 +82,7 @@ jobs:
 
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
-      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      if: env.SSH_ACTIONS == 'true' || contains(github.event.action, 'ssh')
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
