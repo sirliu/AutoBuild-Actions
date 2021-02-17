@@ -43,7 +43,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@main
 
-    - name: Initialization Environment
+    - name: 初始化环境
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
@@ -53,12 +53,12 @@ jobs:
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
 
-    - name: Clone Openwrt source code
+    - name: 拉取Openwrt源码
       run: |
         git clone -b master $REPO_URL openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
-    - name: Run Diy-Part1 Scripts
+    - name: 执行 Diy-Part1 脚本
       run: |
         chmod +x $DIY_SCRIPT
         cd openwrt
@@ -67,13 +67,13 @@ jobs:
         echo "Compile_Date=$(date +%Y%m%d)" > $GITHUB_WORKSPACE/Openwrt.info
         echo "Display_Date=$(date +'%Y/%m/%d')" >> $GITHUB_WORKSPACE/Openwrt.info
 
-    - name: Update & Install Feeds
+    - name: 更新并安装 Feeds
       run: |
         cd openwrt
         ./scripts/feeds update -a
         ./scripts/feeds install -a
 
-    - name: Run Diy-Part2 Scripts
+    - name: 执行 Diy-Part2 脚本
       run: |
         [ -f $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         cd openwrt
@@ -87,20 +87,20 @@ jobs:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
-    - name: Download Packages
+    - name: 下载包
       run: |
         cd openwrt
         make defconfig
         make download -j$(nproc) V=s
         find dl -size -1024c -exec rm -f {} \;
 
-    - name: Compile the Openwrt
+    - name: 编译Openwrt
       run: |
         cd openwrt
         # make -j$(nproc) || make -j1 || make -j1 V=s
         make -j$(nproc) || make -j8 || make -j8 V=s
 
-    - name: Run Diy-Part3 Scripts
+    - name: 执行 Diy-Part3 脚本
       run: |
         echo "## $(date +"%Y%m%d")" > update_log.txt
         cd openwrt
@@ -108,21 +108,21 @@ jobs:
         source $GITHUB_WORKSPACE/$FUNCTION_SCRIPT && Diy-Part3
         echo "Artifacts_DATE=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
-    - name: Upload Firmware to Artifacts
+    - name: 上传固件到Actions
       uses: actions/upload-artifact@main
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       with:
         name: OpenWrt_Firmware_${{ env.Artifacts_DATE }}
         path: openwrt/bin/Firmware
         
-    - name: Upload Firmware directory to Artifacts
+    - name: 上传固件目录到Actions的 Artifacts
       uses: actions/upload-artifact@main
       if: env.UPLOAD_BIN_DIR == 'true' && !cancelled()
       with:
         name: OpenWrt_bin_${{ env.Artifacts_DATE }}
         path: openwrt/bin
 
-    - name: Upload Firmware to Releases
+    - name: 上传固件到Releases
       uses: softprops/action-gh-release@v1
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       env:
@@ -132,7 +132,7 @@ jobs:
         body_path: update_log.txt
         files: openwrt/bin/Firmware/*
         
-    - name: Remove old Releases
+    - name: 移除旧的Releases
       uses: dev-drprasad/delete-older-releases@v0.1.0
       if: env.REMOVE_OLD_RELEASE == 'true' && !cancelled()
       with:
