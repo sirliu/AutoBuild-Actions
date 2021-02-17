@@ -15,7 +15,7 @@ on:
       ssh:
         description: 'SSH connection to Actions'
         required: true
-        default: 'false'
+        default: 'true'
 
   #schedule:
   #  - cron: 0 11 * * *
@@ -96,7 +96,8 @@ jobs:
     - name: Compile the Openwrt
       run: |
         cd openwrt
-        make -j$(nproc) || make -j1 || make -j1 V=s
+        # make -j$(nproc) || make -j1 || make -j1 V=s
+        make -j$(nproc) || make -j8 || make -j8 V=s
 
     - name: Run Diy-Part3 Scripts
       run: |
