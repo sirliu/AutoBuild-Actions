@@ -87,14 +87,14 @@ jobs:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
-    - name: 下载包
+    - name: 下载Packages
       run: |
         cd openwrt
         make defconfig
         make download -j$(nproc) V=s
         find dl -size -1024c -exec rm -f {} \;
 
-    - name: 编译Openwrt
+    - name: 编译Openwrt固件
       run: |
         cd openwrt
         # make -j$(nproc) || make -j1 || make -j1 V=s
@@ -141,7 +141,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
-    - name: Remove workflow runs
+    - name: 移除当前工作流
       uses: GitRML/delete-workflow-runs@main
       if: env.REMOVE_WORKFLOW_RUNS == 'true' && !cancelled()
       with:
