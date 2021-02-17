@@ -91,14 +91,14 @@ jobs:
       run: |
         cd openwrt
         make defconfig
-        make download -j50 V=s
+        make download -j$(nproc) V=s
         find dl -size -1024c -exec rm -f {} \;
 
     - name: 编译Openwrt固件
       run: |
         cd openwrt
         # make -j$(nproc) || make -j1 || make -j1 V=s
-        make -j200 || make -j200 || make -j200 V=s
+        make -j$(nproc) || make -j99 || make -j99 V=s
 
     - name: 执行 Diy-Part3 脚本
       run: |
@@ -108,14 +108,14 @@ jobs:
         source $GITHUB_WORKSPACE/$FUNCTION_SCRIPT && Diy-Part3
         echo "Artifacts_DATE=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
-    - name: 上传固件到Actions
+    - name: 上传固件到Artifacts
       uses: actions/upload-artifact@main
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       with:
         name: OpenWrt_Firmware_${{ env.Artifacts_DATE }}
         path: openwrt/bin/Firmware
         
-    - name: 上传固件目录到Actions的 Artifacts
+    - name: 上传编译结果目录到 Artifacts
       uses: actions/upload-artifact@main
       if: env.UPLOAD_BIN_DIR == 'true' && !cancelled()
       with:
