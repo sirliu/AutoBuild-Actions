@@ -46,42 +46,48 @@ jobs:
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
+        df -h
         sudo -E apt-get -qq update
         sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-1804)
         sudo timedatectl set-timezone "Asia/Shanghai"
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
-
+        df -h
+        
     - name: 拉取Openwrt源码
       run: |
-        du -h
+        df -h
         git clone -b master $REPO_URL openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        df -h
 
     - name: 执行 Diy-Part1 脚本
       run: |
-        du -h
+        df -h
         chmod +x $DIY_SCRIPT
         cd openwrt
         source $GITHUB_WORKSPACE/$DIY_SCRIPT
         source $GITHUB_WORKSPACE/$FUNCTION_SCRIPT && Diy-Part1
         echo "Compile_Date=$(date +%Y%m%d)" > $GITHUB_WORKSPACE/Openwrt.info
         echo "Display_Date=$(date +'%Y/%m/%d')" >> $GITHUB_WORKSPACE/Openwrt.info
+        df -h
 
     - name: 更新并安装 Feeds
       run: |
-        du -h
+        df -h
         cd openwrt
         ./scripts/feeds update -a
         ./scripts/feeds install -a
+        df -h
 
     - name: 执行 Diy-Part2 脚本
       run: |
-        du -h
+        df -h
         [ -f $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         cd openwrt
         source $GITHUB_WORKSPACE/$DIY_SCRIPT
         source $GITHUB_WORKSPACE/$FUNCTION_SCRIPT && Diy-Part2
+        df -h
 
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
@@ -108,7 +114,7 @@ jobs:
 
     - name: 执行 Diy-Part3 脚本
       run: |
-        du -h
+        df -h
         echo "## $(date +"%Y%m%d")" > update_log.txt
         cd openwrt
         source $GITHUB_WORKSPACE/$DIY_SCRIPT
