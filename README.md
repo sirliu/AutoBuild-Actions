@@ -1,3 +1,4 @@
+#感谢Hyy2001X悉心指导，让我在固件编译路上越走越远，越陷越深。
 ## Actions for Building OpenWRT
 
 ![GitHub Stars](https://img.shields.io/github/stars/Hyy2001X/AutoBuild-Actions.svg?style=flat-square&label=Stars&logo=github)
