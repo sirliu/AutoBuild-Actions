@@ -33,7 +33,7 @@ env:
   UPLOAD_BIN_DIR: false
   REMOVE_OLD_RELEASE: false
   REMOVE_WORKFLOW_RUNS: true
-  SSH_ACTIONS: false
+  SSH_ACTIONS: true
 
 jobs:
   build:
