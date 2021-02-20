@@ -13,8 +13,8 @@ Diy_Core() {
 	INCLUDE_mt7621_OC1000MHz=true
 	INCLUDE_Enable_FirewallPort_53=true
 
-	INCLUDE_SSR_Plus=true
-	INCLUDE_Passwall=true
+	INCLUDE_SSR_Plus=false
+	INCLUDE_Passwall=false
 	INCLUDE_HelloWorld=true
 	INCLUDE_Bypass=false
 	INCLUDE_OpenClash=true
@@ -48,7 +48,7 @@ Diy-Part1() {
 	ExtraPackages git other luci-app-serverchan https://github.com/tty228 master
 	ExtraPackages svn other luci-app-socat https://github.com/Lienol/openwrt-package/trunk
 	ExtraPackages svn other luci-app-usb3disable https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw
-        # ExtraPackages git other luci-app-tcpdump https://github.com/KFERMercer
+        ExtraPackages git other luci-app-tcpdump https://github.com/KFERMercer
 	ExtraPackages git other OpenAppFilter https://github.com/destan19 master
 }
 
