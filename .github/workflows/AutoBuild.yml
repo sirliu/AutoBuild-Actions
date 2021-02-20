@@ -25,7 +25,7 @@ on:
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
-  CONFIG_FILE: NEWIFI_D2-NIGHTLY.config
+  CONFIG_FILE: newifi3.config
   DIY_SCRIPT: Scripts/AutoBuild_DiyScript.sh
   FUNCTION_SCRIPT: Scripts/AutoBuild_Function.sh
   UPLOAD_RELEASE: true
@@ -102,6 +102,7 @@ jobs:
 
     - name: 执行 Diy-Part3 脚本
       run: |
+        df -h
         echo "## $(date +"%Y%m%d")" > update_log.txt
         cd openwrt
         source $GITHUB_WORKSPACE/$DIY_SCRIPT
