@@ -46,7 +46,7 @@ jobs:
     - name: Sending start message 
       if: env.SEND_MESSAGE_ON_FINISHED == 'true'
       run:
-        curl https://sc.ftqq.com/${{ secrets.sckey }}.send?text=结束
+        curl https://sc.ftqq.com/${{ secrets.sckey }}.send?text=开始编译了....
 
         
     - name: 初始化环境
