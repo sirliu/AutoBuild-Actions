@@ -1,9 +1,9 @@
 #=======================================================
 # Description: Build OpenWrt using GitHub Actions
-# https://github.com/Hyy2001X/AutoBuild-Actions
+# https://github.com/sirliu/AutoBuild-Actions
 # Lisence: MIT
-# Author: P3TERX
-# Modify: Hyy2001X
+# Author: P3TERX,Hyy2001X
+# Modify: sirliu
 #=======================================================
 
 name: AutoBuild
@@ -152,8 +152,9 @@ jobs:
 
     - name: Sending message
       uses: yakumioto/serverchan-action@v1
-      if: env.SEND_MESSAGE_ON_FINISHED == 'true' && !cancelled()
+      if: env.SEND_MESSAGE_ON_FINISHED == 'true'
+      #&& !cancelled()
       with:
         key: ${{ secrets.sckey }}
-        text: 'OpenWrt complie Finished'
+        text: 'OpenWrt complie ${{GITHUB_RUN_NUMBER}} Finished'
         desp: 'OpenWrt complie Finished'
