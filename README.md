@@ -31,6 +31,7 @@
 1. 进入你的`AutoBuild-Actions`仓库,**下方所有操作都将在你的`AutoBuild-Actions`仓库下进行**
 
 2. 把本地的 '.config' 文件重命名并上传到**仓库根目录**或者直接修改`NEWIFI_D2-NIGHTLY.config`
+   https://github.com/coolsnowwolf/lede/issues/2415
 
 3. 编辑`.github/workflows/AutoBuild.yml`文件,修改`第 27 行`为你上传的 '.config' 文件名称
 
