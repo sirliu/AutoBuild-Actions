@@ -42,13 +42,7 @@ jobs:
     steps:
     - name: 检查
       uses: actions/checkout@main
-      
-    - name: Sending start message 
-      if: env.SEND_MESSAGE_ON_FINISHED == 'true'
-      run:
-        curl https://sc.ftqq.com/${{ secrets.sckey }}.send?text=开始编译了....
-
-        
+    
     - name: 初始化环境
       env:
         DEBIAN_FRONTEND: noninteractive
@@ -156,11 +150,7 @@ jobs:
         retain_days: 1
         keep_minimum_runs: 3
 
-    - name: Sending message
-      uses: yakumioto/serverchan-action@v1
+    - name: 发送完成通知到微信
       if: env.SEND_MESSAGE_ON_FINISHED == 'true'
-      #&& !cancelled()
-      with:
-        key: ${{ secrets.sckey }}
-        text: 'OpenWrt complie Finished'
-        desp: 'OpenWrt complie Finished'
+      run:
+        curl https://sc.ftqq.com/${{ secrets.sckey }}.send?text=Action状态通知&desp=主人，Action完成了，但是小的不知道是否成功.....
