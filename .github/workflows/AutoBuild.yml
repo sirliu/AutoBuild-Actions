@@ -156,5 +156,5 @@ jobs:
       #&& !cancelled()
       with:
         key: ${{ secrets.sckey }}
-        text: 'OpenWrt complie ${{GITHUB_RUN_NUMBER}} Finished'
+        text: 'OpenWrt complie Finished'
         desp: 'OpenWrt complie Finished'
