@@ -44,13 +44,10 @@ jobs:
       uses: actions/checkout@main
       
     - name: Sending start message 
-      uses: yakumioto/serverchan-action@v1
       if: env.SEND_MESSAGE_ON_FINISHED == 'true'
-      #&& !cancelled()
-      with:
-        key: ${{ secrets.sckey }}
-        text: 'OpenWrt complie Starting'
-        desp: 'OpenWrt complie Starting'
+      run:
+        curl https://sc.ftqq.com/${{ secrets.sckey }}.send?text=结束
+
         
     - name: 初始化环境
       env:
