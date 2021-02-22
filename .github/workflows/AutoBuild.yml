@@ -33,6 +33,7 @@ env:
   UPLOAD_BIN_DIR: false
   REMOVE_OLD_RELEASE: false
   REMOVE_WORKFLOW_RUNS: true
+  SEND_MESSAGE_ON_FINISHED: true
 
 jobs:
   build:
@@ -148,3 +149,11 @@ jobs:
       with:
         retain_days: 1
         keep_minimum_runs: 3
+
+    - name: Sending message
+      uses: yakumioto/serverchan-action@v1
+      if: env.SEND_MESSAGE_ON_FINISHED == 'true' && !cancelled()
+      with:
+        key: ${{ secrets.sckey }}
+        text: 'OpenWrt complie Finished'
+        desp: 'OpenWrt complie Finished'
