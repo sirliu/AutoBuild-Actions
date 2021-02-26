@@ -31,7 +31,7 @@ env:
   UPLOAD_RELEASE: true
   UPLOAD_FIRMWARE: true
   UPLOAD_BIN_DIR: false
-  REMOVE_OLD_RELEASE: false
+  REMOVE_OLD_RELEASE: true
   REMOVE_WORKFLOW_RUNS: false
   SEND_MESSAGE_ON_FINISHED: true
 
@@ -130,7 +130,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
       with:
-        tag_name: AutoUpdate
+        tag_name: ${{ env.Artifacts_DATE }}_AutoAction
         body_path: update_log.txt
         files: openwrt/bin/Firmware/*
         
@@ -153,4 +153,4 @@ jobs:
     - name: 发送完成通知到微信
       if: env.SEND_MESSAGE_ON_FINISHED == 'true'
       run:
-        curl https://sc.ftqq.com/${{ secrets.sckey }}.send?text=Action状态通知&desp=主人，Action完成了，但是小的不知道是否成功.....
+        curl https://sc.ftqq.com/${{ secrets.sckey }}.send?text=OpenWrt编译结束&desp=主人，Action完成了，但是小的不知道是否成功.....
