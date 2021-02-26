@@ -145,54 +145,12 @@ AutoExpand_Core() {
 			echo "用户已取消操作."
 			break
 		fi
-		# 创建两个目录，introot用于镜像整个根目录，extroot用于挂载选中分区
-		mkdir -p /tmp/introot && mkdir -p /tmp/extroot
-		mount --bind / /tmp/introot
-		mount ${Choosed_Disk} /tmp/extroot
-		echo "正在清空分区内文件，请稍等..."
-		rm /tmp/extroot/* -rf 
-		# echo " 挂载分区: '${Choosed_Disk}' 到 ' /tmp/extroot' ..."
-		echo "清空完成!正在备份系统文件到 分区: '${Choosed_Disk}',请耐心等待 ..."
-		tar -C /tmp/introot -cf - . | tar -C /tmp/extroot -xf -
-		echo "取消挂载: '/tmp/introot' '/tmp/extroot' ..."
-		umount /tmp/introot && umount /tmp/extroot
-		[ ! -d /mnt/bak ] && mkdir -p /mnt/bak
-		mount ${Choosed_Disk} /mnt/bak
-		echo "同步系统文件改动 ..."
-		sync
-		echo "写入 '分区表' 到 '/etc/config/fstab' ..."
-		block detect > /etc/config/fstab
-		sed -i "s?/mnt/bak?/?g" /etc/config/fstab
-		for ((i=0;i<=${Disk_Number};i++));
-		do
-			uci set fstab.@mount[${i}].enabled='1' > /dev/null 2>&1
-		done
-		uci commit fstab
-		umount -l /mnt/bak
+		AutoExpend_sirliu
 	else
 		echo "正在格式化分区: '${Choosed_Disk}' 为 'ext4' 格式 ..."
 		mkfs.ext4 -F ${Choosed_Disk} > /dev/null 2>&1
 		echo "格式化完成! 挂载分区: '${Choosed_Disk}' 到 ' /tmp/extroot' ..."
-		mkdir -p /tmp/introot && mkdir -p /tmp/extroot
-		mount --bind / /tmp/introot
-		mount ${Choosed_Disk} /tmp/extroot
-		echo "正在备份系统文件到 分区: '${Choosed_Disk}',请耐心等待 ..."
-		tar -C /tmp/introot -cf - . | tar -C /tmp/extroot -xf -
-		echo "取消挂载: '/tmp/introot' '/tmp/extroot' ..."
-		umount /tmp/introot && umount /tmp/extroot
-		[ ! -d /mnt/bak ] && mkdir -p /mnt/bak
-		mount ${Choosed_Disk} /mnt/bak
-		echo "同步系统文件改动 ..."
-		sync
-		echo "写入 '分区表' 到 '/etc/config/fstab' ..."
-		block detect > /etc/config/fstab
-		sed -i "s?/mnt/bak?/?g" /etc/config/fstab
-		for ((i=0;i<=${Disk_Number};i++));
-		do
-			uci set fstab.@mount[${i}].enabled='1' > /dev/null 2>&1
-		done
-		uci commit fstab
-		umount -l /mnt/bak
+		AutoExpend_sirliu
 	fi
 	echo -e "操作结束,外接硬盘分区: '${Choosed_Disk}' 已挂载到 '/'.\n"
 	read -p "挂载完成后需要重启生效,是否立即重启路由器?[Y/n]:" Choose
@@ -205,6 +163,33 @@ AutoExpand_Core() {
 		sleep 3
 		break
 	fi
+}
+
+AutoExpend_sirliu() {
+	# 创建两个目录，introot用于镜像整个根目录，extroot用于挂载选中分区
+	mkdir -p /tmp/introot && mkdir -p /tmp/extroot
+	mount --bind / /tmp/introot
+	mount ${Choosed_Disk} /tmp/extroot
+	# echo "正在清空分区内文件，请稍等..."
+	rm /tmp/extroot/* -rf 
+	# echo " 挂载分区: '${Choosed_Disk}' 到 ' /tmp/extroot' ..."
+	echo "正在备份系统文件到 分区: '${Choosed_Disk}',请耐心等待 ..."
+	tar -C /tmp/introot -cf - . | tar -C /tmp/extroot -xf -
+	echo "取消挂载: '/tmp/introot' '/tmp/extroot' ..."
+	umount /tmp/introot && umount /tmp/extroot
+	[ ! -d /mnt/bak ] && mkdir -p /mnt/bak
+	mount ${Choosed_Disk} /mnt/bak
+	echo "同步系统文件改动 ..."
+	sync
+	echo "写入 '分区表' 到 '/etc/config/fstab' ..."
+	block detect > /etc/config/fstab
+	sed -i "s?/mnt/bak?/?g" /etc/config/fstab
+	for ((i=0;i<=${Disk_Number};i++));
+	do
+		uci set fstab.@mount[${i}].enabled='1' > /dev/null 2>&1
+	done
+	uci commit fstab
+	umount -l /mnt/bak
 }
 
 List_Disk() {
