@@ -42,7 +42,7 @@ Diy_Part1_Base() {
 		# Update_Makefile v2ray-plugin package/lean/v2ray-plugin
 	fi
 	if [[ "${INCLUDE_AutoBuild_Tools}" == "true" ]];then
-		Replace_File Scripts/autoexpand.sh package/base-files/files/bin
+		Replace_File Scripts/AutoBuild_Tools.sh package/base-files/files/bin
 	fi
 	if [[ "${INCLUDE_Passwall}" == "true" ]];then
 		ExtraPackages git lienol openwrt-passwall https://github.com/xiaorouji main
