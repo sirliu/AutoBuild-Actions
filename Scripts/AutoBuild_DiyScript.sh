@@ -13,10 +13,10 @@ Diy_Core() {
 	INCLUDE_mt7621_OC1000MHz=true
 	INCLUDE_Enable_FirewallPort_53=true
 
-	INCLUDE_SSR_Plus=false
+	INCLUDE_SSR_Plus=true
 	INCLUDE_Passwall=false
 	INCLUDE_HelloWorld=false
-	INCLUDE_Bypass=false
+	INCLUDE_Bypass=true
 	INCLUDE_OpenClash=false
 }
 
@@ -40,12 +40,13 @@ Diy-Part1() {
 	# ExtraPackages svn network/services ppp https://github.com/openwrt/openwrt/trunk/package/network/services
 	# ExtraPackages svn network/services hostapd https://github.com/openwrt/openwrt/trunk/package/network/services
 	# ExtraPackages svn kernel mt76 https://github.com/openwrt/openwrt/trunk/package/kernel
-
+	
+	ExtraPackages git other luci-app-dnsfilter https://github.com/garypang13 main
 	ExtraPackages git lean luci-theme-argon https://github.com/jerrykuku 18.06
 	ExtraPackages git other luci-app-argon-config https://github.com/jerrykuku master
 	ExtraPackages git other luci-app-eqos https://github.com/garypang13 master
 	# ExtraPackages git other luci-app-adguardhome https://github.com/Hyy2001X master
-	ExtraPackages svn other luci-app-smartdns https://github.com/project-openwrt/openwrt/trunk/package/ntlf9t
+	# ExtraPackages svn other luci-app-smartdns https://github.com/project-openwrt/openwrt/trunk/package/ntlf9t
 	ExtraPackages git other luci-app-serverchan https://github.com/tty228 master
 	ExtraPackages svn other luci-app-socat https://github.com/Lienol/openwrt-package/trunk
 	ExtraPackages svn other luci-app-usb3disable https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw
