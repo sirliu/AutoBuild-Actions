@@ -135,7 +135,7 @@ AutoExpand_Core() {
 		fi
 	fi
 	choosed_part_type="$(df -T|grep ${Choose}| awk '{print $2}')"
-	if [[ ${choosed_part_type}== ext4 ]]; then
+	if [[ ${choosed_part_type} == ext4 ]]; then
 		echo "选择分区为ext4格式，即将删除分区内所有文件"
 		read -p "是否继续本次操作?[Y/n]:" Choose
 		if [ ${Choose} == Y ] || [ ${Choose} == y ];then
