@@ -12,7 +12,7 @@ AutoBuild_Tools() {
 		echo -e "AutoBuild 固件工具箱 ${Version}\n"
 		echo "1.内部空间扩展"
 		echo "2.Samba 共享"
-		echo "3.挂载硬盘分区"
+		echo "3.挂载硬盘"
 		echo "4.查看挂载点"
 		echo "5.安装软件包"
 		echo -e "\nq.退出\n"
@@ -64,7 +64,7 @@ AutoExpand_UI() {
 		return
 	fi
 	echo ""
-	read -p "请输入要操作的硬盘分区编号[1-${Disk_Number}]:" Choose
+	read -p "请输入要操作的硬盘编号[1-${Disk_Number}]:" Choose
 	echo ""
 	case ${Choose} in
 	q)
@@ -116,7 +116,7 @@ USB_Check_Core() {
 
 AutoExpand_Core() {
 	Choosed_Disk="$(sed -n ${Choose}p ${Disk_Processed_List} | awk '{print $1}')"
-	echo "警告: 本次操作将把分区: '${Choosed_Disk}' 格式化为 'ext4' 格式,请提前做好数据备份工作!"
+	echo "警告: 本次操作将把硬盘: '${Choosed_Disk}' 格式化为 'ext4' 格式,请提前做好数据备份工作!"
 	read -p "是否继续本次操作?[Y/n]:" Choose
 	if [ ${Choose} == Y ] || [ ${Choose} == y ];then
 		sleep 3 && echo ""
@@ -134,46 +134,13 @@ AutoExpand_Core() {
 			exit
 		fi
 	fi
-	choosed_part_type="$(df -T|grep ${Choose}| awk '{print $2}')"
-	if [[ ${choosed_part_type} == ext4 ]]; then
-		echo "选择分区为ext4格式，即将删除分区内所有文件"
-		read -p "是否继续本次操作?[Y/n]:" Choose
-		if [ ${Choose} == Y ] || [ ${Choose} == y ];then
-			sleep 3 && echo ""
-		else
-			sleep 3
-			echo "用户已取消操作."
-			break
-		fi
-		AutoExpend_sirliu
-	else
-		echo "正在格式化分区: '${Choosed_Disk}' 为 'ext4' 格式 ..."
-		mkfs.ext4 -F ${Choosed_Disk} > /dev/null 2>&1
-		echo "格式化完成! 挂载分区: '${Choosed_Disk}' 到 ' /tmp/extroot' ..."
-		AutoExpend_sirliu
-	fi
-	echo -e "操作结束,外接硬盘分区: '${Choosed_Disk}' 已挂载到 '/'.\n"
-	read -p "挂载完成后需要重启生效,是否立即重启路由器?[Y/n]:" Choose
-	if [ ${Choose} == Y ] || [ ${Choose} == y ];then
-		sleep 3 && echo -e "\n正在重启路由器,请耐心等待 ..."
-		sync
-		reboot
-	else
-		echo "用户已取消重启操作."
-		sleep 3
-		break
-	fi
-}
-
-AutoExpend_sirliu() {
-	# 创建两个目录，introot用于镜像整个根目录，extroot用于挂载选中分区
+	echo "正在格式化硬盘: '${Choosed_Disk}' 为 'ext4' 格式 ..."
+	mkfs.ext4 -F ${Choosed_Disk} > /dev/null 2>&1
+	echo "格式化完成! 挂载硬盘: '${Choosed_Disk}' 到 ' /tmp/extroot' ..."
 	mkdir -p /tmp/introot && mkdir -p /tmp/extroot
 	mount --bind / /tmp/introot
 	mount ${Choosed_Disk} /tmp/extroot
-	# echo "正在清空分区内文件，请稍等..."
-	rm /tmp/extroot/* -rf 
-	# echo " 挂载分区: '${Choosed_Disk}' 到 ' /tmp/extroot' ..."
-	echo "正在备份系统文件到 分区: '${Choosed_Disk}',请耐心等待 ..."
+	echo "正在备份系统文件到 硬盘: '${Choosed_Disk}',请耐心等待 ..."
 	tar -C /tmp/introot -cf - . | tar -C /tmp/extroot -xf -
 	echo "取消挂载: '/tmp/introot' '/tmp/extroot' ..."
 	umount /tmp/introot && umount /tmp/extroot
@@ -190,6 +157,17 @@ AutoExpend_sirliu() {
 	done
 	uci commit fstab
 	umount -l /mnt/bak
+	echo -e "操作结束,外接硬盘: '${Choosed_Disk}' 已挂载到 '/'.\n"
+	read -p "挂载完成后需要重启生效,是否立即重启路由器?[Y/n]:" Choose
+	if [ ${Choose} == Y ] || [ ${Choose} == y ];then
+		sleep 3 && echo -e "\n正在重启路由器,请耐心等待 ..."
+		sync
+		reboot
+	else
+		echo "用户已取消重启操作."
+		sleep 3
+		break
+	fi
 }
 
 List_Disk() {
@@ -199,9 +177,9 @@ List_Disk() {
 		_Type="[可用]"
 	fi
 	if [[ ! -z ${3} ]];then
-		echo "${i}.${_Type}分区: '${1}' 挂载点: '${2}' 格式: '${3}' 可用空间: ${4}"
+		echo "${i}.${_Type}硬盘: '${1}' 挂载点: '${2}' 格式: '${3}' 可用空间: ${4}"
 	else
-		echo "${i}.分区: '${1}' 格式: '${2}' 未挂载"
+		echo "${i}.硬盘: '${1}' 格式: '${2}' 未挂载"
 	fi
 }
 
@@ -251,7 +229,7 @@ Mount_Samba_Devices() {
 		Samba_Name=${Disk_Mounted_on#*/mnt/}
 		uci show 2>&1 | grep "sambashare" > ${UCI_Show_List}
 		if [[ ! "$(cat ${UCI_Show_List})" =~ "${Disk_Name}" ]] > /dev/null 2>&1 ;then
-			echo "共享分区: '${Disk_Name}' on '${Disk_Mounted_on}' 到 '${Samba_Name}' ..."
+			echo "共享硬盘: '${Disk_Name}' on '${Disk_Mounted_on}' 到 '${Samba_Name}' ..."
 			echo -e "\nconfig sambashare" >> ${Samba_Config_File}
 			echo -e "\toption auto '1'" >> ${Samba_Config_File}
 			echo -e "\toption name '${Samba_Name}'" >> ${Samba_Config_File}
