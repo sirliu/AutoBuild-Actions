@@ -16,7 +16,7 @@ Diy_Core() {
 	INCLUDE_SSR_Plus=true
 	INCLUDE_Passwall=false
 	INCLUDE_HelloWorld=false
-	INCLUDE_Bypass=true
+	INCLUDE_Bypass=false
 	INCLUDE_OpenClash=false
 }
 
